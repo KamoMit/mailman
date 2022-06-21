@@ -29,17 +29,17 @@
 
 <script>
 import tab from "./tab.vue";
-import { mapState} from 'vuex';
 export default {
   components: {
     tab,
   },
   computed: {
-    ...mapState({
-      GetTabs: "tabs",
-      GetSelected: "selectedTab"
-    })
-
+    GetTabs() {
+      return this.$store.state.tabs;
+    },
+    GetSelected() {
+      return this.$store.state.selectedTab;
+    },
   },
   methods: {
     setTab(tab) {
