@@ -39,6 +39,7 @@ export default {
       GetTabs: "tabs",
       GetSelected: "selectedTab"
     })
+
   },
   methods: {
     setTab(tab) {
