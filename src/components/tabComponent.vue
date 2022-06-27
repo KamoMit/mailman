@@ -53,14 +53,9 @@ export default {
     if (localStorage.tabs) {
       this.$store.state.tabs = JSON.parse(localStorage.tabs);
     }
-  },
-  watch: {
-    GetTabs: {
-      handler(newTabs) {
-        localStorage.tabs = JSON.stringify(newTabs);
-      },
-      deep: true,
-    },
+    if(localStorage.selectedTab){
+      this.$store.commit("setSelectedTab", JSON.parse(localStorage.selectedTab))
+    }
   },
 };
 </script>

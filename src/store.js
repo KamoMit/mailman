@@ -29,10 +29,11 @@ export const store = new Vuex.Store({
                 id: Math.random(),
                 URL
             })
-            console.log(state.History)
+            localStorage.History = JSON.stringify(state.History);
         },
         removeFromHistory: (state, tab) => {
             state.History.splice(tab, 1);
+            localStorage.History = JSON.stringify(state.History);
         },
         addTab: (state, { id, tabNumber, title }) => {
             state.tabs.push({
@@ -40,12 +41,16 @@ export const store = new Vuex.Store({
                 tabNumber,
                 title
             })
+            localStorage.tabs = JSON.stringify(state.tabs);
+
         },
         removeTab: (state, index) => {
             state.tabs.splice(index, 1);
+            localStorage.tabs = JSON.stringify(state.tabs);
         },
         setSelectedTab: (state, tab ) => {
             state.selectedTab = tab
+            localStorage.selectedTab = JSON.stringify(state.selectedTab)
         },
         changeJSONBody: (state, newJSON) => {
 
@@ -57,87 +62,29 @@ export const store = new Vuex.Store({
         }
     },
     actions: {
-        getRequest: (context, { input, requestType }) => {
-            axios.get(input).then(response => {
-                console.log(response)
-                context.commit("DisplayResult", response)
-                context.commit("addToHistory", {
-                    request: requestType,
-                    data: response.data,
-                    URL: input,
-
-                })
-            }).catch(error => context.state.DataToDisplay = error);
-        },
-        postRequest: (context, { input, requestType }) => {
-            if (context.state.DataToDisplay !== "error: Invalid JSON") {
-                axios.post(input, context.state.JSONBody).then(response => {
+        Request: (context, {input, requestType}) => {
+            axios({
+                method: requestType,
+                url: input,
+                data: context.state.JSONBody,
+            }).then(response => {
+                if(requestType === "DELETE"){
+                    context.commit("DisplayResult","Deleted successfully")
+                    context.commit("addToHistory", {
+                        request: requestType,
+                        data: "Deleted successfully",
+                        URL: input,
+                    })
+                }else{
                     context.commit("DisplayResult", response)
                     context.commit("addToHistory", {
                         request: requestType,
-                        data: response,
-                        URL: input,
+                        data: response.data,
+                        URL: input
                     })
-                }).catch(error => {
-                    context.state.DataToDisplay = error
-                });
-            }
-        },
-        putRequest: (context, { input, requestType }) => {
-            if (context.state.DataToDisplay !== "error: Invalid JSON") {
-                axios.put(input, context.state.JSONBody).then(response => {
-                    context.commit("DisplayResult", response)
-                    context.commit("addToHistory", {
-                        request: requestType,
-                        data: response,
-                        URL: input,
-                    })
-                }).catch(error => context.state.DataToDisplay = error)
-            }
-        },
-        patchRequest: (context, { input, requestType }) => {
-            if (context.state.DataToDisplay !== "error: Invalid JSON") {
-                axios.patch(input, context.state.JSONBody).then(response => {
-                    context.commit("DisplayResult", response)
-                    context.commit("addToHistory", {
-                        request: requestType,
-                        data: response,
-                        URL: input,
-                    })
-                }).catch(error => context.state.DataToDisplay = error)
-            }
-        },
-        deleteRequest: (context, { input, requestType }) => {
-            axios.delete(input).then(() => {
-                context.commit("DisplayResult", {
-                    response: "Deleted successfully"
-                })
-                context.commit("addToHistory", {
-                    request: requestType,
-                    data: "Deleted successfully",
-                    URL: input,
-                })
+                }
+               
             }).catch(error => context.state.DataToDisplay = error)
-        },
-        headRequest: (context, { input, requestType }) => {
-            axios.head(input).then(response => {
-                context.commit("DisplayResult", response)
-                context.commit("addToHistory", {
-                    request: requestType,
-                    data: response,
-                    URL: input
-                })
-            }).catch(error => context.state.DataToDisplay = error)
-        },
-        optionsRequest: (context, { input, requestType }) => {
-            axios.options(input).then(response => {
-                context.commit("DisplayResult", response)
-                context.commit("addToHistory", {
-                    request: requestType,
-                    data: response.data,
-                    URL: input
-                })
-            }).catch(error => context.state.DataToDisplay = error)
-        }
+        },    
     }
 })

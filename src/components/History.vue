@@ -46,13 +46,5 @@ export default {
       this.$store.state.History = JSON.parse(localStorage.History);
     }
   },
-  watch: {
-    RequestHistory: {
-      handler(newHistory) {
-        localStorage.History = JSON.stringify(newHistory);
-      },
-      deep: true,
-    },
-  },
 };
 </script>

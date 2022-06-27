@@ -80,53 +80,13 @@ export default {
       selectedRequest: "GET",
     };
   },
-  props: {
-    tabID: {
-      type: Number,
-    },
-  },
   methods: {
     inputSubmit: function () {
-      if (this.selectedRequest === "GET") {
-        this.$store.dispatch("getRequest", {
-          requestType: this.selectedRequest,
-          input: this.input,
-        });
-      } else if (this.selectedRequest === "POST") {
-        this.$store.dispatch("postRequest", {
-          requestType: this.selectedRequest,
-          input: this.input,
-        });
-      } else if (this.selectedRequest === "DELETE") {
-        this.$store.dispatch("deleteRequest", {
-          input: this.input,
-          requestType: this.selectedRequest,
-        });
-      } else if (this.selectedRequest === "PUT") {
-        this.$store.dispatch("putRequest", {
-          input: this.input,
-          requestType: this.selectedRequest,
-        });
-      } else if (this.selectedRequest === "PATCH") {
-        this.$store.dispatch("patchRequest", {
-          input: this.input,
-          requestType: this.selectedRequest,
-        });
-      } else if (this.selectedRequest === "OPTIONS") {
-        this.$store.dispatch("optionsRequest", {
-          input: this.input,
-          requestType: this.selectedRequest,
-        });
-      } else if (this.selectedRequest === "HEAD") {
-        this.$store.dispatch("headRequest", {
-          input: this.input,
-          requestType: this.selectedRequest,
-        });
-      } else if (this.selectedRequest === "OPTIONS") {
-        this.$store.dispatch("optionsRequest", {
-          input: this.input,
-          requestType: this.selectedRequest,
-        });
+      if(this.input != undefined || this.$store.state.DataToDisplay !== "error: Invalid JSON"){
+        this.$store.dispatch("Request",{
+            requestType: this.selectedRequest,
+            input: this.input,
+        })
       }
     },
     IsJSONValid(newJSON) {

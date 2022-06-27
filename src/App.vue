@@ -6,7 +6,7 @@
         tile
         outlined
         color="success"
-        @click="addTab(GetTabs.slice(-1)[0].tabNumber + 1)"
+        @click="addTab"
       >
         Add Tab
       </v-btn>
@@ -40,7 +40,8 @@ export default {
     setSelected(tab) {
       this.$store.commit("setSelectedTab", tab.title);
     },
-    addTab(tabNumber) {
+    addTab() {
+      let tabNumber = this.GetTabs[this.GetTabs.length -1].tabNumber + 1;
       this.$store.commit("addTab", {
         id: Math.random(),
         tabNumber,
